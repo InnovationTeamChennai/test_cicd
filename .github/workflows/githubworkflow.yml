@@ -6,10 +6,10 @@ name: Jira Example issue
 jobs:
   build:
     runs-on: ubuntu-latest
-    - name: Hello World
-      run: echo Hello, world! && exit 1
     name: Jira Example
     steps:
+    - name: Hello World
+      run: echo Hello, world! && exit 1
     - name: Login
       uses: atlassian/gajira-login@master
       env:
