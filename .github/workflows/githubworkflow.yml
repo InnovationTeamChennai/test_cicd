@@ -17,20 +17,60 @@
 #           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
+# name: Demo-test-Jira-GitHub
+# on: [push]
+# jobs:
+#   Explore-GitHub-Actions:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
+#       - run: echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+#       - run: echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+#       - name: Check out repository code
+#         uses: actions/checkout@v3
+#       - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
+#       - run: echo "The workflow is now ready to test your code on the runner."
+#       - name: List files in the repository
+#         run: |
+#           ls ${{ github.workspace }}
+#       - run: echo "This job's status is ${{ job.status }}."
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
 name: Demo-test-Jira-GitHub
-on: [push]
+on:
+  schedule:
+    - cron: 20 07 * * 1
+
 jobs:
-  Explore-GitHub-Actions:
+  create_issue:
+    name: Demo-test-Jira-GitHub issue
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
     steps:
-      - run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
-        uses: actions/checkout@v3
-      - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
-        run: |
-          ls ${{ github.workspace }}
-      - run: echo "This job's status is ${{ job.status }}."
+      - name: Demo-test-Jira-GitHub issue
+        uses: imjohnbo/issue-bot@3daae12aa54d38685d7ff8459fc8a2aee8cea98b
+        with:
+          assignees: "monalisa, doctocat, hubot"
+          labels: "weekly sync, docs-team"
+          title: "Team sync"
+          body: |
+            ### Agenda
+
+            - [ ] Start the recording
+            - [ ] Check-ins
+            - [ ] Discussion points
+            - [ ] Post the recording
+                    
+            ### Discussion Points
+            Add things to discuss below
+
+            - [Work this week](https://github.com/orgs/github/projects/3)
+          pinned: false
+          close-previous: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
