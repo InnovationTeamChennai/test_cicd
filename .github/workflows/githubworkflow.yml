@@ -32,14 +32,15 @@ jobs:
 
     - name: Send mail
       if: always()
-      uses: dawidd6/action-send-mail@v2
+      uses: dawidd6/action-send-mail@v3
       with:
         # mail server settings
         server_address: smtp.gmail.com
         server_port: 465
-        # user credentials
-        username: ${{ secrets.EMAIL_USERNAME }}
-        password: ${{ secrets.EMAIL_PASSWORD }}
+        # Optional (recommended): mail server username:
+        username: ${{secrets.MAIL_USERNAME}}
+        # Optional (recommended) mail server password:
+        password: ${{secrets.MAIL_PASSWORD}}
         # email subject
         subject: ${{ github.job }} job of ${{ github.repository }} has ${{ job.status }}
         # email body as text
