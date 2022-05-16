@@ -43,7 +43,7 @@
 name: Demo-test-Jira-GitHub
 on:
   schedule:
-    - cron: 20 07 * * 1
+    - cron: 0 * * ? * *
 
 jobs:
   create_issue:
