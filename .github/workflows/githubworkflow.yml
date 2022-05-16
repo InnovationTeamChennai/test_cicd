@@ -8,6 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     name: Jira Example
     steps:
+    - name: Hello World
+      run: echo Hello, world! && exit 1
+
     - name: Login
       uses: atlassian/gajira-login@master
       env:
@@ -42,13 +45,13 @@ jobs:
         # Optional (recommended) mail server password:
         password: ${{secrets.MAIL_PASSWORD}}
         # email subject
-        subject: ${{ github.job }} job of ${{ github.repository }} has ${{ job.status }}
+        subject: ${{ github.repository }} ${{ github.job }} has been ${{ job.status }}
         # email body as text
         body: ${{ github.job }} job in worflow ${{ github.workflow }} of ${{ github.repository }} has ${{ job.status }}
         # comma-separated string, send email to
-        to: roach.amalraj@icumed.com,roachleva06@gmail.com
+        to: roach.amalraj@icumed.com
         # from email name
-        from: Jira Admin
+        from: Jira Innovation Admin
 
 
 
