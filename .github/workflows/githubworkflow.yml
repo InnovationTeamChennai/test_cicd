@@ -11,47 +11,57 @@ jobs:
     - name: Hello World
       run: echo Hello, world! && exit 1
 
-    - name: Login
-      if: always()
-      uses: atlassian/gajira-login@master
-      env:
-        JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
-        JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
-        JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
-
-    - name: Jira Create issue
-      if: always()
-      id: create
-      uses: atlassian/gajira-create@v2.0.1
+    - uses: nashmaniac/create-issue-action@v1.1
+      if: ${{ failure() }} # only run when this job is failed.
+      name: Create Issue Action
       with:
-        project: ITP
-        issuetype: Task
-        summary: |
-          ${{ github.repository }} build is ${{ job.status }}
-        description: |
-          Created automatically via GitHub Actions
-        fields: '{"assignee": {"accountId": "6130e26a44c8ed00689764a2"}}'
+        title: Build Failed
+        token: ${{secrets.GITHUB_TOKEN}}
+        assignees: ${{github.actor}}
+        labels: refactoring-needed, help needed
+        body: Workflow failed for commit ${{github.sha}}
 
-    - name: Log created issue
-      run: echo "Issue ${{ steps.create.outputs.issue }} was created"
+    # - name: Login
+    #   if: always()
+    #   uses: atlassian/gajira-login@master
+    #   env:
+    #     JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+    #     JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+    #     JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
 
-    - name: Send mail
-      if: always()
-      uses: dawidd6/action-send-mail@v3
-      with:
-        # mail server settings
-        server_address: smtp.gmail.com
-        server_port: 465
-        # Optional (recommended): mail server username:
-        username: ${{secrets.MAIL_USERNAME}}
-        # Optional (recommended) mail server password:
-        password: ${{secrets.MAIL_PASSWORD}}
-        # email subject
-        subject: ${{ github.repository }} ${{ github.job }} is ${{ job.status }}
-        # email body as text
-        body: ${{ github.job }} job in worflow ${{ github.workflow }} of ${{ github.repository }} is ${{ job.status }}
-        # comma-separated string, send email to
-        to: roach.amalraj@icumed.com,Charlie.Zadeng@icumed.com
-        # from email name
-        from: Jira Innovation Admin
+    # - name: Jira Create issue
+    #   if: always()
+    #   id: create
+    #   uses: atlassian/gajira-create@v2.0.1
+    #   with:
+    #     project: ITP
+    #     issuetype: Task
+    #     summary: |
+    #       ${{ github.repository }} build is ${{ job.status }}
+    #     description: |
+    #       Created automatically via GitHub Actions
+    #     fields: '{"assignee": {"accountId": "62679d67fff19d006926866c"}}'
+
+    # - name: Log created issue
+    #   run: echo "Issue ${{ steps.create.outputs.issue }} was created"
+
+    # - name: Send mail
+    #   if: always()
+    #   uses: dawidd6/action-send-mail@v3
+    #   with:
+    #     # mail server settings
+    #     server_address: smtp.gmail.com
+    #     server_port: 465
+    #     # Optional (recommended): mail server username:
+    #     username: ${{secrets.MAIL_USERNAME}}
+    #     # Optional (recommended) mail server password:
+    #     password: ${{secrets.MAIL_PASSWORD}}
+    #     # email subject
+    #     subject: ${{ github.repository }} ${{ github.job }} is ${{ job.status }}
+    #     # email body as text
+    #     body: ${{ github.job }} job in workflow ${{ github.workflow }} of ${{ github.repository }} is ${{ job.status }}
+    #     # comma-separated string, send email to
+    #     to: roach.amalraj@icumed.com
+    #     # from email name
+    #     from: Jira Innovation Admin
 
