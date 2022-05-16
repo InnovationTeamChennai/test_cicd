@@ -101,7 +101,7 @@ jobs:
         summary: |
           Build completed for ${{ github.repository }}
         description: |
-          This is a test
+          Created automatically via GitHub Actions
         fields: '{"assignee": {"accountId": "62679d67fff19d006926866c"}}'
 
     - name: Log created issue
