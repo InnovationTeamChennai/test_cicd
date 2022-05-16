@@ -40,37 +40,65 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Demo-test-Jira-GitHub
-on:
-  schedule:
-    - cron: 20 07 * * 1
+# name: Demo-test-Jira-GitHub
+# on:
+#   schedule:
+#     - cron: 20 07 * * 1
+
+# jobs:
+#   create_issue:
+#     name: Demo-test-Jira-GitHub issue
+#     runs-on: ubuntu-latest
+#     permissions:
+#       issues: write
+#     steps:
+#       - name: Demo-test-Jira-GitHub issue
+#         uses: imjohnbo/issue-bot@3daae12aa54d38685d7ff8459fc8a2aee8cea98b
+#         with:
+#           assignees: "monalisa, doctocat, hubot"
+#           labels: "weekly sync, docs-team"
+#           title: "Team sync"
+#           body: |
+#             ### Agenda
+
+#             - [ ] Start the recording
+#             - [ ] Check-ins
+#             - [ ] Discussion points
+#             - [ ] Post the recording
+                    
+#             ### Discussion Points
+#             Add things to discuss below
+
+#             - [Work this week](https://github.com/orgs/github/projects/3)
+#           pinned: false
+#           close-previous: false
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+on: push
+
+name: Jira Example
 
 jobs:
-  create_issue:
-    name: Demo-test-Jira-GitHub issue
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      issues: write
+    name: Jira Example
     steps:
-      - name: Demo-test-Jira-GitHub issue
-        uses: imjohnbo/issue-bot@3daae12aa54d38685d7ff8459fc8a2aee8cea98b
-        with:
-          assignees: "monalisa, doctocat, hubot"
-          labels: "weekly sync, docs-team"
-          title: "Team sync"
-          body: |
-            ### Agenda
+    # - name: Login
+    #   uses: atlassian/gajira-login@master
+      - name: Jira Login
+        uses: atlassian/gajira-login@v2.0.0
+      env:
+        JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+        JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+        JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
 
-            - [ ] Start the recording
-            - [ ] Check-ins
-            - [ ] Discussion points
-            - [ ] Post the recording
-                    
-            ### Discussion Points
-            Add things to discuss below
-
-            - [Work this week](https://github.com/orgs/github/projects/3)
-          pinned: false
-          close-previous: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Jira TODO
+      uses: atlassian/gajira-todo@master
+      with:
+        project: ITP
+        issuetype: Task
+        description: Created automatically via GitHub Actions
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
