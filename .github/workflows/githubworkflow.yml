@@ -78,7 +78,7 @@
 
 on: push
 
-name: Jira Example
+name: Jira Example issue
 
 jobs:
   build:
