@@ -9,7 +9,7 @@ jobs:
     name: Jira Example
     steps:
     - name: Hello World
-      run: echo Hello, world! && exit 1
+      run: echo Hello, world!
 
     - name: Login
       if: always()
