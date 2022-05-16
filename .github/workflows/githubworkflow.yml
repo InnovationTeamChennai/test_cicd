@@ -1,69 +1,69 @@
 
-# on: push
+on: push
 
-# name: Jira Example issue
-
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-#     name: Jira Example
-#     steps:
-#     - name: Login
-#       uses: atlassian/gajira-login@master
-#       env:
-#         JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
-#         JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
-#         JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
-
-#     - name: Jira Create issue
-#       id: create
-#       uses: atlassian/gajira-create@v2.0.1
-#       with:
-#         project: ITP
-#         issuetype: Task
-#         summary: |
-#           Build completed for ${{ github.repository }}
-#         description: |
-#           Created automatically via GitHub Actions
-#         fields: '{"assignee": {"accountId": "62679d67fff19d006926866c"}}'
-
-#     - name: Log created issue
-#       run: echo "Issue ${{ steps.create.outputs.issue }} was created"
-
-
-
-name: Build
-
-on:
-  push:
-    branches: main
+name: Jira Example issue
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    name: Jira Example
     steps:
-      - uses: actions/checkout@v2
+    - name: Login
+      uses: atlassian/gajira-login@master
+      env:
+        JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+        JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+        JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
 
-      - name: Hello World
-        run: echo Hello, world! && exit 1
-      - name: Send mail
-        if: always()
-        uses: dawidd6/action-send-mail@v2
-        with:
-          # mail server settings
-          server_address: smtp.office365.com
-          server_port: 465
-          # user credentials
-          username: ${{ secrets.EMAIL_USERNAME }}
-          password: ${{ secrets.EMAIL_PASSWORD }}
-          # email subject
-          subject: ${{ github.job }} job of ${{ github.repository }} has ${{ job.status }}
-          # email body as text
-          body: ${{ github.job }} job in worflow ${{ github.workflow }} of ${{ github.repository }} has ${{ job.status }}
-          # comma-separated string, send email to
-          to: roach.amalraj@icumed.com,doejohn@gmail.com
-          # from email name
-          from: Innovation JIRA Admin
+    - name: Jira Create issue
+      id: create
+      uses: atlassian/gajira-create@v2.0.1
+      with:
+        project: ITP
+        issuetype: Task
+        summary: |
+          Build completed for ${{ github.repository }} and Build has been ${{ job.status }}
+        description: |
+          Created automatically via GitHub Actions
+        fields: '{"assignee": {"accountId": "62679d67fff19d006926866c"}}'
+
+    - name: Log created issue
+      run: echo "Issue ${{ steps.create.outputs.issue }} was created"
+
+
+
+# name: Build
+
+# on:
+#   push:
+#     branches: main
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+
+#       - name: Hello World
+#         run: echo Hello, world! && exit 1
+#       - name: Send mail
+#         if: always()
+#         uses: dawidd6/action-send-mail@v2
+#         with:
+#           # mail server settings
+#           server_address: smtp.office365.com
+#           server_port: 465
+#           # user credentials
+#           username: ${{ secrets.EMAIL_USERNAME }}
+#           password: ${{ secrets.EMAIL_PASSWORD }}
+#           # email subject
+#           subject: ${{ github.job }} job of ${{ github.repository }} has ${{ job.status }}
+#           # email body as text
+#           body: ${{ github.job }} job in worflow ${{ github.workflow }} of ${{ github.repository }} has ${{ job.status }}
+#           # comma-separated string, send email to
+#           to: roach.amalraj@icumed.com,doejohn@gmail.com
+#           # from email name
+#           from: Innovation JIRA Admin
 
 
 
