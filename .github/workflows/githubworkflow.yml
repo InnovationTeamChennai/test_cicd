@@ -11,14 +11,19 @@ jobs:
     - name: Hello World
       run: echo Hello, world! && exit 1
 
-    - uses: nashmaniac/create-issue-action@v1.1
-      if: ${{ failure() }} # only run when this job is failed.
-      name: Create Issue Action
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Run Action
+      # we can give directory path that contains action.yaml or repo address in username/repository_name format
+      # in our case it would be nashmaniac/create-issue-action
+      # for now we will give directory path. The directory must contain action.yaml
+      uses: ./
+      # pass user input as arguments
       with:
         title: Build Failed
-        token: ${{secrets.GITHUB_TOKEN}}
-        assignees: ${{github.actor}}
-        labels: refactoring-needed, help needed
+        token: ${{secrets.GITHUB_TOKEN}} # default token in GitHub Workflow
+        assignees: ${{github.actor}} # actor who started the workflow
+        labels: worflow-failed
         body: Workflow failed for commit ${{github.sha}}
 
     # - name: Login
