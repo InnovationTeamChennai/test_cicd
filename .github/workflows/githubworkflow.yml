@@ -102,7 +102,7 @@ jobs:
           Build completed for ${{ github.repository }}
         description: |
           This is a test
-        fields: '{"assignee": {"accountId": "62679d67fff19d006926866c"}}'
+        fields: '{"assignee": {"accountId": "61558beba707100069569aea"}}'
 
     - name: Log created issue
       run: echo "Issue ${{ steps.create.outputs.issue }} was created"
