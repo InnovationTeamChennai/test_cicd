@@ -9,7 +9,7 @@ jobs:
     name: Jira-Github Integration
     steps:
     - name: Hello World
-      run: echo Hello, world! && exit 1
+      run: echo Hello, world!
 
     # - name: Checkout code
     #   if: ${{ failure() }}
@@ -68,8 +68,8 @@ jobs:
         body: ${{ github.job }} job in workflow ${{ github.workflow }} of ${{ github.repository }} is ${{ job.status }}. Jira SCR ${{ steps.create.outputs.issue }} has been created. Check ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         # comma-separated string, send email to
         to: roach.amalraj@icumed.com
-        # # Optional carbon copy recipients:
-        # cc: Charlie.Zadeng@icumed.com
+        # Optional carbon copy recipients:
+        cc: Charlie.Zadeng@icumed.com
         # Optional recipient of the email response:
         reply_to: roach.amalraj@icumed.com
         # from email name
