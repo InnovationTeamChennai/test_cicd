@@ -11,11 +11,11 @@ jobs:
     - name: Hello World
       run: echo Hello, world! && exit 1
 
-    - uses: actions/checkout@v3
-    - name: Build with logs
-      run: |
-        mkdir ${{ runner.temp }}/build_logs
-        ./build.sh --log-path ${{ runner.temp }}/build_logs
+    # - uses: actions/checkout@v3
+    # - name: Build with logs
+    #   run: |
+    #     mkdir ${{ runner.temp }}/build_logs
+    #     ./build.sh --log-path ${{ runner.temp }}/build_logs
     - name: Upload logs on fail
       if: ${{ failure() }}
       uses: actions/upload-artifact@v3
