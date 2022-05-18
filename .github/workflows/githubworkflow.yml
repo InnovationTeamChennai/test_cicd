@@ -13,7 +13,8 @@ jobs:
       run: echo Hello, world!
 
     - name: buildlog
-    - run: |
+      id: checkRunId
+      run: |
         URI="https://api.github.com"
         API_HEADER="Accept: application/vnd.github.v3+json"
         AUTH_HEADER="Authorization: token ${{ secrets.GITHUB_TOKEN }}"
@@ -23,7 +24,7 @@ jobs:
         id=$(echo "$body" | jq .jobs | jq .[-1] | jq .id)
         sha=$(echo "$body" | jq .jobs | jq .[-1] | jq -r .head_sha)
         echo ::set-output name=checkid::$id
-      id: checkRunId
+
 
     # - uses: actions/checkout@v3
     # - name: Build with logs
