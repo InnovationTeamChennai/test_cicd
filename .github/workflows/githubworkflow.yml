@@ -2,23 +2,45 @@
 
 # .github/workflows/my_workflow.yaml
 
-on: push
+name: Create issue on commit
+
+on: [ push ]
+
 jobs:
-  setup:
-    name: Get check run ids from action run id
-    runs-on: ubuntu-latest
+  create_commit:
+    runs-on: ubuntu-latest 
+    permissions:
+      issues: write 
     steps:
-      - name: Fetch check run ids
-        id: fetch
-        uses: octokit/request-action@v2.x
-        with:
-          route: GET /repos/{repo}/actions/runs/{run_id}/jobs
-          repo: ${{ github.repository }}
-          run_id: ${{ github.run_id }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Echo check run ids
-        run: echo "job ids - ${{ toJSON(fromJSON(steps.fetch.outputs.data).jobs.*.id) }}
+      - name: Create issue using REST API
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/${{ github.repository }}/issues \
+          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'content-type: application/json' \
+          --data '{
+            "title": "Automated issue for commit: ${{ github.sha }}",
+            "body": "This issue was automatically created by the GitHub Action workflow **${{ github.workflow }}**. \n\n The commit hash was: _${{ github.sha }}_."
+            }' \
+          --fail
+
+# on: push
+# jobs:
+#   setup:
+#     name: Get check run ids from action run id
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Fetch check run ids
+#         id: fetch
+#         uses: octokit/request-action@v2.x
+#         with:
+#           route: GET /repos/{repo}/actions/runs/{run_id}/jobs
+#           repo: ${{ github.repository }}
+#           run_id: ${{ github.run_id }}
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       - name: Echo check run ids
+#         run: echo "job ids - ${{ toJSON(fromJSON(steps.fetch.outputs.data).jobs.*.id) }}
 
 
 
@@ -38,73 +60,72 @@ jobs:
 #       id: helloresponse
 #       run: echo Hello, world! && exit 1
 
-#     # - name: buildlog
-#     #   id: checkRunId
-#     #   run: |
-#     #     URI="https://api.github.com"
-#     #     API_HEADER="Accept: application/vnd.github.v3+json"
-#     #     AUTH_HEADER="Authorization: token ${{ secrets.GITHUB_TOKEN }}"
+#     - name: buildlog
+#       id: checkRunId
+#       run: |
+#         URI="https://api.github.com"
+#         API_HEADER="Accept: application/vnd.github.v3+json"
+#         AUTH_HEADER="Authorization: token ${{ secrets.GITHUB_TOKEN }}"
           
-#     #     body=$(curl -sSL -H "${AUTH_HEADER}" -H "$API_HEADER" "$URI/repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/jobs")
-#     #     url=$(echo "$body" | jq .jobs | jq .[-1] | jq .html_url)
-#     #     id=$(echo "$body" | jq .jobs | jq .[-1] | jq .id)
-#     #     sha=$(echo "$body" | jq .jobs | jq .[-1] | jq -r .head_sha)
-#     #     echo ::set-output name=checkid::$id
+#         body=$(curl -sSL -H "${AUTH_HEADER}" -H "$API_HEADER" "$URI/repos/${GITHUB_REPOSITORY}/actions/runs/${{ github.run_id }}/jobs")
+#         url=$(echo "$body" | jq .jobs | jq .[-1] | jq .html_url)
+#         id=$(echo "$body" | jq .jobs | jq .[-1] | jq .id)
+#         sha=$(echo "$body" | jq .jobs | jq .[-1] | jq -r .head_sha)
+#         echo ::set-output name=checkid::$id
+#         echo ${{ steps.checkRunId.outputs.checkid }}
 
-#     # - name: Create logs with API
-#     #   run: |
-#     #     curl \
-#     #       -H "Accept: application/vnd.github.v3+json" \
-#     #       https://api.github.com/repos/${ORGANIZATION}/${REPOSITORY}/actions/runs
-#     #   env:
-#     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#     #     ORGANIZATION: ${{ github.event.organization.login }}
-#     #     REPOSITORY: ${{ github.event.repository.name }}
 
-#     # - name: Login
-#     #   if: ${{ failure() }}
-#     #   uses: atlassian/gajira-login@master
-#     #   env:
-#     #     JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
-#     #     JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
-#     #     JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+#     - name: create log
+#       id: createlog
+#       run: |
+#         curl \
+#           -H "Accept: application/vnd.github.v3+json" \
+#           https://api.github.com/repos/${{ github.repository_owner }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/logs
 
-#     # - name: Jira Create issue
-#     #   if: ${{ failure() }}
-#     #   id: create
-#     #   uses: atlassian/gajira-create@v2.0.1
-#     #   with:
-#     #     project: ITP
-#     #     issuetype: Task
-#     #     summary: |
-#     #       ${{ github.repository }} build is ${{ job.status }}
-#     #     description: |
-#     #       This Ticket was Created automatically by GitHub Actions
-#     #     fields: '{"assignee": {"accountId": "62679d67fff19d006926866c"}}'
+    # - name: Login
+    #   if: ${{ failure() }}
+    #   uses: atlassian/gajira-login@master
+    #   env:
+    #     JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+    #     JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+    #     JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
 
-#     # - name: Log created issue
-#     #   run: echo "Issue ${{ steps.create.outputs.issue }} was created"
+    # - name: Jira Create issue
+    #   if: ${{ failure() }}
+    #   id: create
+    #   uses: atlassian/gajira-create@v2.0.1
+    #   with:
+    #     project: ITP
+    #     issuetype: Task
+    #     summary: |
+    #       ${{ github.repository }} build is ${{ job.status }}
+    #     description: |
+    #       This Ticket was Created automatically by GitHub Actions
+    #     fields: '{"assignee": {"accountId": "62679d67fff19d006926866c"}}'
 
-#     - name: Send mail
-#       if: always()
-#       uses: dawidd6/action-send-mail@v3
-#       with:
-#         # mail server settings
-#         server_address: smtp.gmail.com
-#         server_port: 465
-#         # Optional (recommended): mail server username:
-#         username: ${{secrets.MAIL_USERNAME}}
-#         # Optional (recommended) mail server password:
-#         password: ${{secrets.MAIL_PASSWORD}}
-#         # email subject
-#         subject: ${{ github.repository }} ${{ github.job }} is ${{ job.status }}
-#         # email body as text
-#         body: ${{ github.job }} job in workflow ${{ github.workflow }} of ${{ github.repository }} is ${{ job.status }}. Jira SCR ${{ steps.create.outputs.issue }} has been created. This is a logs for the job -${{ steps.checkRunId.outputs.checkid }}
-#         # comma-separated string, send email to
-#         to: roach.amalraj@icumed.com
-#         # # Optional carbon copy recipients:
-#         # cc: Charlie.Zadeng@icumed.com
-#         # Optional recipient of the email response:
-#         reply_to: roach.amalraj@icumed.com
-#         # from email name
-#         from: Jira Innovation Admin
+    # - name: Log created issue
+    #   run: echo "Issue ${{ steps.create.outputs.issue }} was created"
+
+    # - name: Send mail
+    #   if: always()
+    #   uses: dawidd6/action-send-mail@v3
+    #   with:
+    #     # mail server settings
+    #     server_address: smtp.gmail.com
+    #     server_port: 465
+    #     # Optional (recommended): mail server username:
+    #     username: ${{secrets.MAIL_USERNAME}}
+    #     # Optional (recommended) mail server password:
+    #     password: ${{secrets.MAIL_PASSWORD}}
+    #     # email subject
+    #     subject: ${{ github.repository }} ${{ github.job }} is ${{ job.status }}
+    #     # email body as text
+    #     body: ${{ github.job }} job in workflow ${{ github.workflow }} of ${{ github.repository }} is ${{ job.status }}. Jira SCR ${{ steps.create.outputs.issue }} has been created. This is a logs for the job -${{ steps.checkRunId.outputs.checkid }}
+    #     # comma-separated string, send email to
+    #     to: roach.amalraj@icumed.com
+    #     # # Optional carbon copy recipients:
+    #     # cc: Charlie.Zadeng@icumed.com
+    #     # Optional recipient of the email response:
+    #     reply_to: roach.amalraj@icumed.com
+    #     # from email name
+    #     from: Jira Innovation Admin
