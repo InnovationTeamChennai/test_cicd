@@ -9,6 +9,7 @@ jobs:
     name: Jira-Github Integration
     steps:
     - name: Hello World
+      id: response
       run: echo Hello, world!
 
     # - uses: actions/checkout@v3
@@ -38,26 +39,26 @@ jobs:
     #     labels: worflow-failed
     #     body: Workflow failed for commit ${{github.sha}}
 
-    - name: Login
-      if: ${{ failure() }}
-      uses: atlassian/gajira-login@master
-      env:
-        JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
-        JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
-        JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+    # - name: Login
+    #   if: ${{ failure() }}
+    #   uses: atlassian/gajira-login@master
+    #   env:
+    #     JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+    #     JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+    #     JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
 
-    - name: Jira Create issue
-      if: ${{ failure() }}
-      id: create
-      uses: atlassian/gajira-create@v2.0.1
-      with:
-        project: ITP
-        issuetype: Task
-        summary: |
-          ${{ github.repository }} build is ${{ job.status }}
-        description: |
-          This Ticket was Created automatically by GitHub Actions
-        fields: '{"assignee": {"accountId": "62679d67fff19d006926866c"}}'
+    # - name: Jira Create issue
+    #   if: ${{ failure() }}
+    #   id: create
+    #   uses: atlassian/gajira-create@v2.0.1
+    #   with:
+    #     project: ITP
+    #     issuetype: Task
+    #     summary: |
+    #       ${{ github.repository }} build is ${{ job.status }}
+    #     description: |
+    #       This Ticket was Created automatically by GitHub Actions
+    #     fields: '{"assignee": {"accountId": "62679d67fff19d006926866c"}}'
 
     # - name: Log created issue
     #   run: echo "Issue ${{ steps.create.outputs.issue }} was created"
