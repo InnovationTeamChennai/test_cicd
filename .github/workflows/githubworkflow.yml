@@ -82,7 +82,7 @@ jobs:
       if: always()
       id: createlog
       run: |
-        curl -v -u username:$token -H "Accept: application/vnd.github.v3+json" \
+        curl -v -H "Accept: application/vnd.github.v3+json" \
         --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }} \
         https://api.github.com/repos/${{ github.repository_owner }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/logs
     # - name: Login
