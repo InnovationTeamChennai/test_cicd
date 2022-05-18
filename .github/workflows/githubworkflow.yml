@@ -56,7 +56,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Jira-Github Integration
     permissions:
-      actions: read-all|write-all 
+      actions: read
     steps:
     - name: Hello World
       id: helloresponse
