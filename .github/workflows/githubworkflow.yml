@@ -12,7 +12,7 @@ jobs:
       id: response
       run: echo Hello, world!
 
-    - name:buildlog
+    - name: buildlog
     - run: |
         URI="https://api.github.com"
         API_HEADER="Accept: application/vnd.github.v3+json"
