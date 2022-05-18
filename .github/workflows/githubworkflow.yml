@@ -77,7 +77,7 @@ jobs:
         # email subject
         subject: ${{ github.repository }} ${{ github.job }} is ${{ job.status }}
         # email body as text
-        body: ${{ github.job }} job in workflow ${{ github.workflow }} of ${{ github.repository }} is ${{ job.status }}. Jira SCR ${{ steps.create.outputs.issue }} has been created. This is a logs for the job - ${{steps.response.outputs.result}} .
+        body: ${{ github.job }} job in workflow ${{ github.workflow }} of ${{ github.repository }} is ${{ job.status }}. Jira SCR ${{ steps.create.outputs.issue }} has been created. This is a logs for the job - ${{steps.response.outputs.result}} ..... Another one -- https://github.com/<name>/<repo>/commit/$GITHUB_SHA/checks
         # comma-separated string, send email to
         to: roach.amalraj@icumed.com
         # # Optional carbon copy recipients:
