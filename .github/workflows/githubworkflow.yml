@@ -63,6 +63,7 @@ jobs:
       run: echo Hello, world! && exit 1
 
     - name: buildlog
+      if: always()
       id: checkRunId
       run: |
         URI="https://api.github.com"
@@ -78,6 +79,7 @@ jobs:
 
 
     - name: create log
+      if: always()
       id: createlog
       run: |
         curl \
