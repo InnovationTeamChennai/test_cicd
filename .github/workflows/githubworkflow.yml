@@ -1,6 +1,7 @@
 
 
 # .github/workflows/my_workflow.yaml
+on: push
 jobs:
   setup:
     name: Get check run ids from action run id
