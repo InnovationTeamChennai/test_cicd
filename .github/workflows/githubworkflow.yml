@@ -52,6 +52,8 @@ on: push
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
     steps:
       - uses: actions/checkout@v2
       - run: |
