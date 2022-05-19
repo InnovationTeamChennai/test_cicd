@@ -48,7 +48,7 @@
 
 
 name: publish
-on: [workflow_dispatch, repository_dispatch]
+on: push
 jobs:
   publish:
     runs-on: ubuntu-latest
