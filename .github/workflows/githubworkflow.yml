@@ -1,7 +1,6 @@
 
 
 # .github/workflows/my_workflow.yaml
-#test
 
 
 # on: push
@@ -23,61 +22,20 @@
 #         run: echo "job ids - ${{ toJSON(fromJSON(steps.fetch.outputs.data).jobs.*.id) }}
 
 
+name: Jira Issue & E-mail Notification
 
-# name: Create issue on commit
-
-# on: [ push ]
-
-# jobs:
-#   create_commit:
-#     runs-on: ubuntu-latest 
-#     permissions:
-#       issues: write 
-#     steps:
-#       - name: Create issue using REST API
-#         run: |
-#           curl --request POST \
-#           --url https://api.github.com/repos/${{ github.repository }}/issues \
-#           --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
-#           --header 'content-type: application/json' \
-#           --data '{
-#             "title": "Automated issue for commit: ${{ github.sha }}",
-#             "body": "This issue was automatically created by the GitHub Action workflow **${{ github.workflow }}**. \n\n The commit hash was: _${{ github.sha }}_."
-#             }' \
-#           --fail
-
-
-name: publish
 on: push
+
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
+    name: Jira-Github Integration
     permissions:
-      actions: write
+      actions: read
     steps:
-      - uses: actions/checkout@v2
-        with:
-           repo-token: ${{ secrets.GITHUB_TOKEN }}
-      - run: |
-          date > published.txt
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add .
-          git commit -m "Published Changes"
-          git push
-
-# name: Jira Issue & E-mail Notification
-
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-#     name: Jira-Github Integration
-#     permissions:
-#       actions: read
-#     steps:
-#     - name: Hello World
-#       id: helloresponse
-#       run: echo Hello, world! && exit 1
+    - name: Hello World
+      id: helloresponse
+      run: echo Hello, world! && exit 1
     
     # - name: buildlog
     #   if: always()
@@ -95,15 +53,16 @@ jobs:
     #     echo ${{ steps.checkRunId.outputs.checkid }}
 
 
-    # - name: create log
-    #   if: always()
-    #   id: createlog
-    #   run: |
-    #     curl \
-    #       -H "Accept: application/vnd.github.v3+json" \
-    #       --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
-    #       --header 'content-type: application/json' \
-    #       https://api.github.com/repos/${{ github.repository_owner }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/log
+    - name: create log
+      if: always()
+      id: createlog
+      run: |
+        curl --request GET \
+          -H "Accept: application/vnd.github.v3+json" \
+          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'content-type: application/json' \
+          https://api.github.com/repos/${{ github.repository_owner }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/log
+
     # - name: Login
     #   if: ${{ failure() }}
     #   uses: atlassian/gajira-login@master
