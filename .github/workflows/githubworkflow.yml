@@ -61,15 +61,7 @@ jobs:
     - name: Hello World
       id: helloresponse
       run: echo Hello, world! && exit 1
-    - name: Generate list using Markdown
-      if: always()
-      run: |
-        echo "This is the lead in sentence for the list" >> $GITHUB_STEP_SUMMARY
-        echo "" >> $GITHUB_STEP_SUMMARY # this is a blank line
-        echo "- Lets add a bullet point" >> $GITHUB_STEP_SUMMARY
-        echo "- Lets add a second bullet point" >> $GITHUB_STEP_SUMMARY
-        echo "- How about a third one?" >> $GITHUB_STEP_SUMMARY
-
+    
     # - name: buildlog
     #   if: always()
     #   id: checkRunId
@@ -86,15 +78,15 @@ jobs:
     #     echo ${{ steps.checkRunId.outputs.checkid }}
 
 
-    # - name: create log
-    #   if: always()
-    #   id: createlog
-    #   run: |
-    #     curl \
-    #       -H "Accept: application/vnd.github.v3+json" \
-    #       --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
-    #       --header 'content-type: application/json' \
-    #       https://api.github.com/repos/${{ github.repository_owner }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/log
+    - name: create log
+      if: always()
+      id: createlog
+      run: |
+        curl \
+          -H "Accept: application/vnd.github.v3+json" \
+          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'content-type: application/json' \
+          https://api.github.com/repos/${{ github.repository_owner }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/log
     # - name: Login
     #   if: ${{ failure() }}
     #   uses: atlassian/gajira-login@master
