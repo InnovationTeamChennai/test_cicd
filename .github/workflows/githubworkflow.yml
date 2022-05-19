@@ -61,6 +61,7 @@ jobs:
     - name: Hello World
       id: helloresponse
       run: echo Hello, world! && exit 1
+      echo "{markdown content}" >> $GITHUB_STEP_SUMMARY
 
     # - name: buildlog
     #   if: always()
