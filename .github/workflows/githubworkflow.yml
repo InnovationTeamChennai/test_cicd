@@ -57,10 +57,7 @@ jobs:
       if: always()
       id: createlog
       run: |
-        curl --request GET \
-          -H "Accept: application/vnd.github.v3+json" \
-          -H "Authorization: token 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" \
-          https://api.github.com/user
+        curl -u InnovationTeamChennai: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 https://api.github.com/user
     # - name: Login
     #   if: ${{ failure() }}
     #   uses: atlassian/gajira-login@master
