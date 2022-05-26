@@ -57,7 +57,9 @@ jobs:
       if: always()
       id: createlog
       run: |
-        curl -u InnovationTeamChennai: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 https://api.github.com/user
+        curl \
+        -H "Accept: application/vnd.github.v3+json" \
+        https://api.github.com/repos/InnovationTeamChennai/test_cicd/actions/runs/${{ github.run_id }}/log
     # - name: Login
     #   if: ${{ failure() }}
     #   uses: atlassian/gajira-login@master
