@@ -60,7 +60,7 @@ jobs:
          curl -i \
           -H "Accept: application/vnd.github.v3+json" \
           -H "Authorization: ${{ secrets. GITHUB_TOKEN }}" \
-          https://api.github.com/repos/InnovationTeamChennai/test_cicd/actions/runs/${{ github.run_id }}/log
+          https://api.github.com/repos/hspmm/InnovationTeamChennai/test_cicd/actions/runs/${{ github.run_id }}/log
     # - name: Login
     #   if: ${{ failure() }}
     #   uses: atlassian/gajira-login@master
