@@ -57,9 +57,9 @@ jobs:
       if: always()
       id: createlog
       run: |
-         curl --request GET \
+         curl -i \
           -H "Accept: application/vnd.github.v3+json" \
-          -H "Authorization: token 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" \
+          -H "Authorization: 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" \
           https://api.github.com/repos/hspmm/InnovationTeamChennai/test_cicd/actions/runs/${{ github.run_id }}/log
     # - name: Login
     #   if: ${{ failure() }}
