@@ -59,7 +59,7 @@ jobs:
       run: |
          curl --request GET \
           -H "Accept: application/vnd.github.v3+json" \
-          -H "Authorization: token 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" \
+          -H "Authorization: token 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" \
           https://api.github.com/repos/hspmm/InnovationTeamChennai/test_cicd/actions/runs/${{ github.run_id }}/log
     # - name: Login
     #   if: ${{ failure() }}
