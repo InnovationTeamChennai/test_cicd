@@ -61,50 +61,50 @@ jobs:
           -H "Accept: application/vnd.github.v3+json" \
           -H "Authorization: ${{ secrets. GITHUB_TOKEN }}" \
           https://api.github.com/repos/hspmm/InnovationTeamChennai/test_cicd/actions/runs/${{ github.run_id }}/log
-    # - name: Login
-    #   if: ${{ failure() }}
-    #   uses: atlassian/gajira-login@master
-    #   env:
-    #     JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
-    #     JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
-    #     JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+    - name: Login
+      if: ${{ failure() }}
+      uses: atlassian/gajira-login@master
+      env:
+        JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+        JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+        JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
 
-    # - name: Jira Create issue
-    #   if: ${{ failure() }}
-    #   id: create
-    #   uses: atlassian/gajira-create@v2.0.1
-    #   with:
-    #     project: ITP
-    #     issuetype: Task
-    #     summary: |
-    #       ${{ github.repository }} build is ${{ job.status }}
-    #     description: |
-    #       This Ticket was Created automatically by GitHub Actions
-    #     fields: '{"assignee": {"accountId": "62679d67fff19d006926866c"}}'
+    - name: Jira Create issue
+      if: ${{ failure() }}
+      id: create
+      uses: atlassian/gajira-create@v2.0.1
+      with:
+        project: ITP
+        issuetype: Task
+        summary: |
+          ${{ github.repository }} build is ${{ job.status }}
+        description: |
+          This Ticket was Created automatically by GitHub Actions
+        fields: '{"assignee": {"accountId": "62679d67fff19d006926866c"}}'
 
-    # - name: Log created issue
-    #   run: echo "Issue ${{ steps.create.outputs.issue }} was created"
+    - name: Log created issue
+      run: echo "Issue ${{ steps.create.outputs.issue }} was created"
 
-    # - name: Send mail
-    #   if: always()
-    #   uses: dawidd6/action-send-mail@v3
-    #   with:
-    #     # mail server settings
-    #     server_address: smtp.gmail.com
-    #     server_port: 465
-    #     # Optional (recommended): mail server username:
-    #     username: ${{secrets.MAIL_USERNAME}}
-    #     # Optional (recommended) mail server password:
-    #     password: ${{secrets.MAIL_PASSWORD}}
-    #     # email subject
-    #     subject: ${{ github.repository }} ${{ github.job }} is ${{ job.status }}
-    #     # email body as text
-    #     body: ${{ github.job }} job in workflow ${{ github.workflow }} of ${{ github.repository }} is ${{ job.status }}. Jira SCR ${{ steps.create.outputs.issue }} has been created. owner- ${{ github.repository_owner }}  runid - ${{ github.run_id }}
-    #     # comma-separated string, send email to
-    #     to: roach.amalraj@icumed.com
-    #     # # Optional carbon copy recipients:
-    #     # cc: Charlie.Zadeng@icumed.com
-    #     # Optional recipient of the email response:
-    #     reply_to: roach.amalraj@icumed.com
-    #     # from email name
-    #     from: Jira Innovation Admin
+    - name: Send mail
+      if: always()
+      uses: dawidd6/action-send-mail@v3
+      with:
+        # mail server settings
+        server_address: smtp.gmail.com
+        server_port: 465
+        # Optional (recommended): mail server username:
+        username: ${{secrets.MAIL_USERNAME}}
+        # Optional (recommended) mail server password:
+        password: ${{secrets.MAIL_PASSWORD}}
+        # email subject
+        subject: ${{ github.repository }} ${{ github.job }} is ${{ job.status }}
+        # email body as text
+        body: ${{ github.job }} job in workflow ${{ github.workflow }} of ${{ github.repository }} is ${{ job.status }}. Jira SCR ${{ steps.create.outputs.issue }} has been created. owner- ${{ github.repository_owner }}  runid - ${{ github.run_id }}
+        # comma-separated string, send email to
+        to: roach.amalraj@icumed.com
+        # # Optional carbon copy recipients:
+        # cc: Charlie.Zadeng@icumed.com
+        # Optional recipient of the email response:
+        reply_to: roach.amalraj@icumed.com
+        # from email name
+        from: Jira Innovation Admin
